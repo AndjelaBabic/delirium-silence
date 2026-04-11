@@ -1,7 +1,12 @@
-import { CoverVideo } from "./components/cover-video/CoverVideo";
+import { Route, Routes } from "react-router-dom";
+import { Home } from "./components/home/Home";
 
 const App = () => {
-  return <CoverVideo />;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />}></Route>
+    </Routes>
+  );
 };
 
 export default App;
