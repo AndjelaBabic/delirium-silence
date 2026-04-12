@@ -1,69 +1,85 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import image from "../../../assets/philosophy.png";
+import { useLanguage } from "../../../context/LanguageContext";
 
 export const PhilosophySection = () => {
+  const { t } = useLanguage();
+  const p = t.philosophy;
+
   return (
     <Box
       sx={{
-        backgroundColor: "#0b0b0b",
+        backgroundColor: "var(--ds-dark)",
         color: "#e8e8e8",
-        py: { xs: 10, md: 16 },
+        py: { xs: 10, md: 18 },
+        overflow: "hidden",
       }}
+      id="philosophy"
     >
       <Container maxWidth="lg">
-        <Grid container spacing={8} alignItems="center">
-          {/* Image */}
+        <Grid container spacing={{ xs: 6, md: 12 }} alignItems="center">
           <Grid size={{ xs: 12, md: 6 }}>
-            <Box
-              sx={{
-                width: "100%",
-                height: { xs: 350, md: 500 },
-                backgroundImage: `url(${image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                borderRadius: "4px",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-              }}
-            />
+            <Box sx={{ position: "relative" }}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: { xs: 12, md: 20 },
+                  left: { xs: 12, md: 20 },
+                  right: { xs: -12, md: -20 },
+                  bottom: { xs: -12, md: -20 },
+                  border: "1px solid rgba(var(--ds-accent-rgb),0.25)",
+                  borderRadius: "2px",
+                  zIndex: 0,
+                }}
+              />
+              <Box
+                component="img"
+                src={image}
+                alt="Our philosophy"
+                sx={{
+                  position: "relative",
+                  zIndex: 1,
+                  width: "100%",
+                  height: { xs: 320, sm: 420, md: 560 },
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  borderRadius: "2px",
+                  display: "block",
+                  filter: "brightness(0.88)",
+                }}
+              />
+            </Box>
           </Grid>
 
-          {/* Text */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <Typography
-              sx={{
-                fontSize: "0.8rem",
-                letterSpacing: "0.35em",
-                mb: 3,
-                color: "#c9a96a",
-              }}
-            >
-              OUR PHILOSOPHY
+            <Typography sx={{ fontSize: "0.7rem", letterSpacing: "0.4em", mb: 3, color: "var(--ds-accent)", textTransform: "uppercase" }}>
+              {p.label}
             </Typography>
 
-            <Typography
-              sx={{
-                fontSize: { xs: "1.8rem", md: "2.4rem" },
-                fontWeight: 300,
-                lineHeight: 1.4,
-                mb: 4,
-              }}
-            >
-              Dining is not consumption. It is presence, silence, and sensation.
+            <Typography sx={{ fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" }, fontWeight: 300, lineHeight: 1.35, mb: 4, letterSpacing: "0.01em" }}>
+              {p.headline1}
+              <br />{p.headline2}
+              <br />{p.headline3}
             </Typography>
 
-            <Typography
-              sx={{
-                fontSize: "1rem",
-                lineHeight: 1.9,
-                color: "#bdbdbd",
-                maxWidth: "500px",
-              }}
-            >
-              At Delirium Silence, every course is composed like music — a
-              progression of textures, temperatures, and emotion. We do not
-              serve meals. We orchestrate experiences meant to be felt long
-              after the final bite.
+            <Divider sx={{ borderColor: "rgba(var(--ds-accent-rgb),0.3)", mb: 4, width: 60 }} />
+
+            <Typography sx={{ fontSize: { xs: "0.95rem", md: "1rem" }, lineHeight: 1.95, color: "#a8a8a8", mb: 6 }}>
+              {p.body}
             </Typography>
+
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" }, gap: { xs: 3, sm: 4 } }}>
+              {p.pillars.map(({ label, text }: { label: string; text: string }) => (
+                <Box key={label}>
+                  <Typography sx={{ fontSize: "0.7rem", letterSpacing: "0.3em", color: "var(--ds-accent)", textTransform: "uppercase", mb: 1 }}>
+                    {label}
+                  </Typography>
+                  <Typography sx={{ fontSize: "0.85rem", color: "#787878", lineHeight: 1.7 }}>
+                    {text}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           </Grid>
         </Grid>
       </Container>

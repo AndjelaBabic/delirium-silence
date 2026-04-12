@@ -1,3 +1,13 @@
+:root {
+  --ds-accent: #c9a96a;
+  --ds-accent-rgb: 201,169,106;
+  --ds-accent-dark: #b8904f;
+  --ds-dark: #1C1917;
+  --ds-dark-rgb: 28,25,23;
+  --ds-light: #f7f5f2;
+  --ds-warm: #FAF8F3;
+}
+
 html,
 body,
 #root {

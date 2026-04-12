@@ -7,6 +7,9 @@ import { Gallery } from "../sections/galery/Galery";
 import { SetMenus } from "../sections/menu/SetMenu";
 import { OurStory } from "../sections/our-story/OurStory";
 import { PhilosophySection } from "../sections/philosophy/PhilosophySection";
+import { PressRecognition } from "../sections/press/PressRecognition";
+import { SpaceSection } from "../sections/space/SpaceSection";
+import { WineSection } from "../sections/wine/WineSection";
 
 export const Home = () => {
   return (
@@ -15,9 +18,12 @@ export const Home = () => {
       <CoverVideo />
       <PhilosophySection />
       <ChefSection />
+      <SpaceSection />
       <OurStory />
       <SetMenus />
+      <WineSection />
       <Gallery />
+      <PressRecognition />
       <BookTable />
       <Footer />
     </>
