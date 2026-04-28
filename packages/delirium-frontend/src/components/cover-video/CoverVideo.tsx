@@ -1,7 +1,10 @@
+"use client";
+import { useEffect, useRef } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { keyframes } from "@mui/system";
-import video from "../../assets/delirium-cover.mp4";
 import { useLanguage } from "../../context/LanguageContext";
+
+const VIDEO_SRC = "/delirium-cover.mp4";
 
 const scrollLine = keyframes`
   0%   { transform: scaleY(0); transform-origin: top; }
@@ -38,24 +41,44 @@ const Content = styled(Box)({
   padding: "0 24px",
 });
 
-export const CoverVideo = () => {
+interface Props {
+  onReady?: () => void;
+}
+
+export const CoverVideo = ({ onReady }: Props) => {
   const { t } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !onReady) return;
+
+    // If the video already has enough data (e.g. cached), fire immediately.
+    // readyState >= 3 means HAVE_FUTURE_DATA — enough to start playback.
+    if (video.readyState >= 3) {
+      onReady();
+      return;
+    }
+
+    // Otherwise wait for the canplay event.
+    video.addEventListener("canplay", onReady, { once: true });
+    return () => video.removeEventListener("canplay", onReady);
+  }, [onReady]);
 
   const scrollToBook = () => {
     document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const scrollToNext = () => {
-    document
-      .getElementById("philosophy")
-      ?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("philosophy")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <VideoWrapper>
       <Box
+        ref={videoRef}
         component="video"
-        src={video}
+        src={VIDEO_SRC}
         autoPlay
         loop
         muted
@@ -66,7 +89,6 @@ export const CoverVideo = () => {
       <Overlay />
 
       <Content>
-        {/* Location eyebrow */}
         <Typography
           variant="overline"
           sx={{
@@ -79,7 +101,6 @@ export const CoverVideo = () => {
           {t.cover.location}
         </Typography>
 
-        {/* Title */}
         <Typography
           variant="h1"
           sx={{
@@ -96,7 +117,6 @@ export const CoverVideo = () => {
           {t.cover.title2}
         </Typography>
 
-        {/* Subtitle */}
         <Typography
           sx={{
             color: "rgba(255,255,255,0.55)",
@@ -111,7 +131,6 @@ export const CoverVideo = () => {
           {t.cover.subtitle}
         </Typography>
 
-        {/* CTA — solid gold */}
         <Box
           onClick={scrollToBook}
           sx={{
@@ -123,88 +142,40 @@ export const CoverVideo = () => {
             "&:hover": { backgroundColor: "var(--ds-accent-dark)" },
           }}
         >
-          <Typography
-            sx={{
-              fontSize: { xs: "0.6rem", md: "0.65rem" },
-              letterSpacing: "0.4em",
-              textTransform: "uppercase",
-              color: "#fff",
-              fontWeight: 500,
-            }}
-          >
+          <Typography sx={{
+            fontSize: { xs: "0.6rem", md: "0.65rem" },
+            letterSpacing: "0.4em",
+            textTransform: "uppercase",
+            color: "#fff",
+            fontWeight: 500,
+          }}>
             {t.cover.cta}
           </Typography>
         </Box>
       </Content>
 
-      {/* Bottom info bar */}
       <Box
         sx={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 3,
-          px: { xs: 3, md: 8 },
-          py: { xs: 2.5, md: 3 },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 3,
+          px: { xs: 3, md: 8 }, py: { xs: 2.5, md: 3 },
+          display: "flex", alignItems: "center", justifyContent: "space-between",
           borderTop: "1px solid rgba(255,255,255,0.1)",
         }}
       >
-        <Typography
-          sx={{
-            fontSize: "0.6rem",
-            letterSpacing: "0.3em",
-            color: "rgba(255,255,255,0.38)",
-            textTransform: "uppercase",
-          }}
-        >
+        <Typography sx={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: "rgba(255,255,255,0.38)", textTransform: "uppercase" }}>
           Thu — Sat · 18:00–20:00
         </Typography>
 
-        {/* Animated scroll line */}
         <Box
           onClick={scrollToNext}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            cursor: "pointer",
-            opacity: 0.45,
-            "&:hover": { opacity: 0.75 },
-            transition: "opacity 0.3s",
-          }}
+          sx={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", opacity: 0.45, "&:hover": { opacity: 0.75 }, transition: "opacity 0.3s" }}
         >
-          <Box
-            sx={{
-              width: "1px",
-              height: 36,
-              backgroundColor: "rgba(255,255,255,0.2)",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                backgroundColor: "#fff",
-                animation: `${scrollLine} 2s ease-in-out infinite`,
-              }}
-            />
+          <Box sx={{ width: "1px", height: 36, backgroundColor: "rgba(255,255,255,0.2)", overflow: "hidden", position: "relative" }}>
+            <Box sx={{ position: "absolute", inset: 0, backgroundColor: "#fff", animation: `${scrollLine} 2s ease-in-out infinite` }} />
           </Box>
         </Box>
 
-        <Typography
-          sx={{
-            fontSize: "0.6rem",
-            letterSpacing: "0.3em",
-            color: "rgba(255,255,255,0.38)",
-            textTransform: "uppercase",
-          }}
-        >
+        <Typography sx={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: "rgba(255,255,255,0.38)", textTransform: "uppercase" }}>
           Est. 2024 · Belgrade
         </Typography>
       </Box>

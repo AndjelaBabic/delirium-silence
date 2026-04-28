@@ -1,0 +1,22 @@
+/* Gold theme CSS variables — used throughout all components via var(--ds-accent) etc. */
+:root {
+  --ds-accent: #c9a96a;
+  --ds-accent-rgb: 201,169,106;
+  --ds-accent-dark: #b8904f;
+  --ds-dark: #1C1917;
+  --ds-dark-rgb: 28,25,23;
+  --ds-light: #f7f5f2;
+  --ds-warm: #FAF8F3;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
