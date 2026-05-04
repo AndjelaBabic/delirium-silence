@@ -3,7 +3,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useEffect, useState } from "react";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 import meal1 from "../../../assets/meal1.jpeg";
 import meal2 from "../../../assets/meal2.png";
@@ -21,7 +22,7 @@ import meal12 from "../../../assets/meal12.png";
 const images = [meal1, meal2, meal3, meal4, meal5, meal6, meal7, meal8, meal9, meal10, meal11, meal12];
 
 export const Gallery = () => {
-  const { t } = useLanguage();
+  const gallery = useSection<typeof translations.en.gallery>("gallery");
   const [index, setIndex] = useState<number | null>(null);
 
   const isOpen = index !== null;
@@ -41,14 +42,14 @@ export const Gallery = () => {
   }, [isOpen]);
 
   return (
-    <Box id="gallery" sx={{ py: { xs: 10, md: 16 }, backgroundColor: "var(--ds-light)" }}>
+    <Box component="section" aria-label="Gallery" id="gallery" sx={{ py: { xs: 10, md: 16 }, backgroundColor: "var(--ds-light)" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: { xs: 6, md: 10 } }}>
           <Typography sx={{ fontSize: "0.7rem", letterSpacing: "0.4em", color: "var(--ds-accent)", textTransform: "uppercase", mb: 3 }}>
-            {t.gallery.label}
+            {gallery.label}
           </Typography>
-          <Typography sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, fontWeight: 300, lineHeight: 1.2, color: "#1a1a1a" }}>
-            {t.gallery.headline}
+          <Typography component="h2" sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, fontWeight: 300, lineHeight: 1.2, color: "#1a1a1a" }}>
+            {gallery.headline}
           </Typography>
         </Box>
 
@@ -67,7 +68,7 @@ export const Gallery = () => {
                   "&:hover img": { transform: "scale(1.05)" },
                 }}
               >
-                <Box component="img" src={img} alt={`Dish ${i + 1}`} sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }} />
+                <Box component="img" src={img} alt={gallery.imageAlts?.[i] ?? `Delirium Silence dish ${i + 1}`} sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }} />
                 <Box className="overlay" sx={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.25)", opacity: 0, transition: "opacity 0.3s ease" }} />
               </Box>
             </Grid>
@@ -81,7 +82,7 @@ export const Gallery = () => {
           onClick={close}
         >
           {isOpen && (
-            <Box component="img" src={images[index!]} alt={`Dish ${index! + 1}`} onClick={(e) => e.stopPropagation()}
+            <Box component="img" src={images[index!]} alt={gallery.imageAlts?.[index!] ?? `Delirium Silence dish ${index! + 1}`} onClick={(e) => e.stopPropagation()}
               sx={{ maxWidth: { xs: "90vw", md: "75vw" }, maxHeight: "80vh", objectFit: "contain", display: "block", userSelect: "none" }}
             />
           )}

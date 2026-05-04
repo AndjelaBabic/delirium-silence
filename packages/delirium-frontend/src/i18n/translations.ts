@@ -134,6 +134,20 @@ export const translations = {
     gallery: {
       label: "Our Cuisine",
       headline: "Every Plate, a Canvas",
+      imageAlts: [
+        "Delirium Silence signature tasting menu dish — Belgrade fine dining",
+        "Artisan plating by Chef Vladimir Kučera, Delirium Silence",
+        "Molecular gastronomy course at Delirium Silence, Belgrade",
+        "Seasonal fine dining course — Delirium Experience",
+        "Delirium Silence — handcrafted tasting menu plate",
+        "Belgrade fine dining — Delirium Silence kitchen creation",
+        "Chef Vladimir Kučera's culinary composition",
+        "Delirium Silence — modern European tasting course",
+        "Pescatarian fine dining course, Delirium Silence Belgrade",
+        "Vegetarian tasting menu — Delirium Silence",
+        "Delirium Silence — nine-course Madness Experience dish",
+        "Fine dining plate — Delirium Silence, Dositejeva, Belgrade",
+      ],
     },
     press: {
       label: "Press & Recognition",
@@ -348,6 +362,20 @@ export const translations = {
     gallery: {
       label: "Naša Kuhinja",
       headline: "Svaki Tanjir, Platno",
+      imageAlts: [
+        "Delirium Silence — potpisno jelo degustacionog menija, Beograd",
+        "Umetničko serviranje šefa Vladimira Kučere, Delirium Silence",
+        "Molekularna gastronomija — kurs u Delirium Silence, Beograd",
+        "Sezonski kurs finog ugostiteljstva — Delirium Iskustvo",
+        "Delirium Silence — ručno kreiran tanjir degustacionog menija",
+        "Beogradsko fino ugostiteljstvo — kreacija kuhinje Delirium Silence",
+        "Kulinarska kompozicija šefa Vladimira Kučere",
+        "Delirium Silence — kurs modernog evropskog menija",
+        "Pescatarijanski kurs finog ugostiteljstva, Delirium Silence Beograd",
+        "Vegetarijanski degustacioni meni — Delirium Silence",
+        "Delirium Silence — jelo iz devetokursnog Madness iskustva",
+        "Fino ugostiteljstvo — Delirium Silence, Dositejeva, Beograd",
+      ],
     },
     press: {
       label: "Štampa i Priznanja",

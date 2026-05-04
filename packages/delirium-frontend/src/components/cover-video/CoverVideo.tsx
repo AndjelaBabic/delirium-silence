@@ -1,7 +1,14 @@
+"use client";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 import { Box, Typography, styled } from "@mui/material";
 import { keyframes } from "@mui/system";
-import video from "../../assets/delirium-cover.mp4";
-import { useLanguage } from "../../context/LanguageContext";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import jreLogo from "../../assets/JRE_Logo_.png";
+import gaultMillauLogo from "../../assets/Logo Gault&millau.png";
+
+const VIDEO_SRC = "/delirium-cover.mp4";
 
 const scrollLine = keyframes`
   0%   { transform: scaleY(0); transform-origin: top; }
@@ -38,8 +45,29 @@ const Content = styled(Box)({
   padding: "0 24px",
 });
 
-export const CoverVideo = () => {
-  const { t } = useLanguage();
+interface Props {
+  onReady?: () => void;
+}
+
+export const CoverVideo = ({ onReady }: Props) => {
+  const cover = useSection<typeof translations.en.cover>("cover");
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !onReady) return;
+
+    // If the video already has enough data (e.g. cached), fire immediately.
+    // readyState >= 3 means HAVE_FUTURE_DATA — enough to start playback.
+    if (video.readyState >= 3) {
+      onReady();
+      return;
+    }
+
+    // Otherwise wait for the canplay event.
+    video.addEventListener("canplay", onReady, { once: true });
+    return () => video.removeEventListener("canplay", onReady);
+  }, [onReady]);
 
   const scrollToBook = () => {
     document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
@@ -54,8 +82,9 @@ export const CoverVideo = () => {
   return (
     <VideoWrapper>
       <Box
+        ref={videoRef}
         component="video"
-        src={video}
+        src={VIDEO_SRC}
         autoPlay
         loop
         muted
@@ -66,7 +95,6 @@ export const CoverVideo = () => {
       <Overlay />
 
       <Content>
-        {/* Location eyebrow */}
         <Typography
           variant="overline"
           sx={{
@@ -76,12 +104,11 @@ export const CoverVideo = () => {
             mb: 4,
           }}
         >
-          {t.cover.location}
+          {cover.location}
         </Typography>
 
-        {/* Title */}
         <Typography
-          variant="h1"
+          component="h1"
           sx={{
             color: "#fff",
             fontWeight: 300,
@@ -89,14 +116,14 @@ export const CoverVideo = () => {
             lineHeight: 1.05,
             letterSpacing: { xs: "2px", md: "4px" },
             textTransform: "uppercase",
+            fontFamily: "var(--font-playfair), serif",
           }}
         >
-          {t.cover.title1}
+          {cover.title1}
           <br />
-          {t.cover.title2}
+          {cover.title2}
         </Typography>
 
-        {/* Subtitle */}
         <Typography
           sx={{
             color: "rgba(255,255,255,0.55)",
@@ -108,10 +135,9 @@ export const CoverVideo = () => {
             mb: { xs: 5, md: 6 },
           }}
         >
-          {t.cover.subtitle}
+          {cover.subtitle}
         </Typography>
 
-        {/* CTA — solid gold */}
         <Box
           onClick={scrollToBook}
           sx={{
@@ -132,12 +158,11 @@ export const CoverVideo = () => {
               fontWeight: 500,
             }}
           >
-            {t.cover.cta}
+            {cover.cta}
           </Typography>
         </Box>
       </Content>
 
-      {/* Bottom info bar */}
       <Box
         sx={{
           position: "absolute",
@@ -164,7 +189,28 @@ export const CoverVideo = () => {
           Thu — Sat · 18:00–20:00
         </Typography>
 
-        {/* Animated scroll line */}
+        <Box
+          component="a"
+          href="https://jre.eu/en/restaurants/deliriumsilence"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            opacity: 0.7,
+            filter: "invert(1)",
+            mixBlendMode: "screen",
+            "&:hover": { opacity: 1 },
+            transition: "opacity 0.3s",
+          }}
+        >
+          <Image
+            src={jreLogo}
+            alt="JRE"
+            height={56}
+            width={110}
+            style={{ objectFit: "contain" }}
+          />
+        </Box>
+
         <Box
           onClick={scrollToNext}
           sx={{
@@ -195,6 +241,27 @@ export const CoverVideo = () => {
               }}
             />
           </Box>
+        </Box>
+
+        <Box
+          component="a"
+          href="https://rs.gaultmillau.com/sr/restaurants/delirium-silence"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            opacity: 0.7,
+            filter: "brightness(0) invert(1)",
+            "&:hover": { opacity: 1 },
+            transition: "opacity 0.3s",
+          }}
+        >
+          <Image
+            src={gaultMillauLogo}
+            alt="Gault & Millau"
+            height={56}
+            width={120}
+            style={{ objectFit: "contain" }}
+          />
         </Box>
 
         <Typography

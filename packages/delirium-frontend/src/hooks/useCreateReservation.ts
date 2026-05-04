@@ -18,7 +18,9 @@ interface ReservationResponse {
 export function useCreateReservation() {
   return useMutation<ReservationResponse, Error, ReservationPayload>({
     mutationFn: async (payload) => {
-      const response = await fetch("http://localhost:3001/api/reservations", {
+      // Relative URL — works in dev and production without any config.
+      // The API route lives at src/app/api/reservations/route.ts
+      const response = await fetch("/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -1,4 +1,18 @@
-import { createContext, useContext, useState } from "react";
+"use client";
+
+/**
+ * "use client" is required here because this component uses:
+ * - useState / useEffect (React hooks — browser only)
+ * - localStorage (browser API — doesn't exist on the server)
+ *
+ * NEXT.JS NOTE on localStorage:
+ * In Next.js the component renders on the SERVER first, then in the browser.
+ * Reading localStorage inside useState initializer would crash on the server.
+ * Fix: start with the default value ("en"), then read localStorage in useEffect
+ * which only runs in the browser after the page loads.
+ */
+
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Language } from "../i18n/translations";
 import { translations } from "../i18n/translations";
@@ -13,9 +27,13 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>(
-    () => (localStorage.getItem("lang") as Language) || "en"
-  );
+  const [language, setLanguage] = useState<Language>("en");
+
+  // Read stored language preference after mount (browser only)
+  useEffect(() => {
+    const stored = localStorage.getItem("lang") as Language | null;
+    if (stored === "sr") setLanguage("sr");
+  }, []);
 
   const handleSetLanguage = (lang: Language) => {
     localStorage.setItem("lang", lang);
@@ -23,7 +41,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t: translations[language] }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage: handleSetLanguage, t: translations[language] }}
+    >
       {children}
     </LanguageContext.Provider>
   );
