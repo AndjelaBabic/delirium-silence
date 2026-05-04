@@ -6,7 +6,7 @@ export const WineSection = () => {
   const w = t.wine;
 
   return (
-    <Box id="wine" sx={{ backgroundColor: "var(--ds-warm)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
+    <Box component="section" aria-label="Wine & Pairings" id="wine" sx={{ backgroundColor: "var(--ds-warm)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
       <Container maxWidth="lg">
 
         <Grid container spacing={{ xs: 0, md: 12 }} alignItems="stretch">
@@ -30,10 +30,10 @@ export const WineSection = () => {
                 {w.label}
               </Typography>
 
-              <Typography sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 300, color: "#1a1a1a", lineHeight: 1.2, mb: 1 }}>
+              <Typography component="h2" sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 300, color: "#1a1a1a", lineHeight: 1.2, mb: 1 }}>
                 {w.headline}
               </Typography>
-              <Typography sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 300, color: "#1a1a1a", lineHeight: 1.2, mb: 5 }}>
+              <Typography aria-hidden="true" sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 300, color: "#1a1a1a", lineHeight: 1.2, mb: 5 }}>
                 {w.headline2}
               </Typography>
 

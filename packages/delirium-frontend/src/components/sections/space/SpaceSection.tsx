@@ -7,7 +7,7 @@ export const SpaceSection = () => {
   const s = t.space;
 
   return (
-    <Box id="space" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
+    <Box component="section" aria-label="The Setting" id="space" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
       <Container maxWidth="lg">
         <Grid container spacing={{ xs: 6, md: 12 }} alignItems="center">
 
@@ -49,7 +49,7 @@ export const SpaceSection = () => {
               {s.label}
             </Typography>
 
-            <Typography sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, color: "#f5f0e8" }}>
+            <Typography component="h2" sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, color: "#f5f0e8" }}>
               {s.headline}
               <br />{s.headline2}
             </Typography>

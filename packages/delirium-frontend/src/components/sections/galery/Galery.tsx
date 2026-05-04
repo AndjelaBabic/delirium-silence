@@ -41,13 +41,13 @@ export const Gallery = () => {
   }, [isOpen]);
 
   return (
-    <Box id="gallery" sx={{ py: { xs: 10, md: 16 }, backgroundColor: "var(--ds-light)" }}>
+    <Box component="section" aria-label="Gallery" id="gallery" sx={{ py: { xs: 10, md: 16 }, backgroundColor: "var(--ds-light)" }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: { xs: 6, md: 10 } }}>
           <Typography sx={{ fontSize: "0.7rem", letterSpacing: "0.4em", color: "var(--ds-accent)", textTransform: "uppercase", mb: 3 }}>
             {t.gallery.label}
           </Typography>
-          <Typography sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, fontWeight: 300, lineHeight: 1.2, color: "#1a1a1a" }}>
+          <Typography component="h2" sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, fontWeight: 300, lineHeight: 1.2, color: "#1a1a1a" }}>
             {t.gallery.headline}
           </Typography>
         </Box>
@@ -67,7 +67,7 @@ export const Gallery = () => {
                   "&:hover img": { transform: "scale(1.05)" },
                 }}
               >
-                <Box component="img" src={img} alt={`Dish ${i + 1}`} sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }} />
+                <Box component="img" src={img} alt={(t.gallery as { imageAlts?: string[] }).imageAlts?.[i] ?? `Delirium Silence dish ${i + 1}`} sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }} />
                 <Box className="overlay" sx={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.25)", opacity: 0, transition: "opacity 0.3s ease" }} />
               </Box>
             </Grid>
@@ -81,7 +81,7 @@ export const Gallery = () => {
           onClick={close}
         >
           {isOpen && (
-            <Box component="img" src={images[index!]} alt={`Dish ${index! + 1}`} onClick={(e) => e.stopPropagation()}
+            <Box component="img" src={images[index!]} alt={(t.gallery as { imageAlts?: string[] }).imageAlts?.[index!] ?? `Delirium Silence dish ${index! + 1}`} onClick={(e) => e.stopPropagation()}
               sx={{ maxWidth: { xs: "90vw", md: "75vw" }, maxHeight: "80vh", objectFit: "contain", display: "block", userSelect: "none" }}
             />
           )}

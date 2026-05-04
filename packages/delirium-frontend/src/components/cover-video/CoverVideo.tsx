@@ -1,7 +1,10 @@
 "use client";
-import { useEffect, useRef } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { keyframes } from "@mui/system";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import jreLogo from "../../assets/JRE_Logo_.png";
+import gaultMillauLogo from "../../assets/Logo Gault&millau.png";
 import { useLanguage } from "../../context/LanguageContext";
 
 const VIDEO_SRC = "/delirium-cover.mp4";
@@ -70,7 +73,9 @@ export const CoverVideo = ({ onReady }: Props) => {
   };
 
   const scrollToNext = () => {
-    document.getElementById("philosophy")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("philosophy")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -102,7 +107,7 @@ export const CoverVideo = ({ onReady }: Props) => {
         </Typography>
 
         <Typography
-          variant="h1"
+          component="h1"
           sx={{
             color: "#fff",
             fontWeight: 300,
@@ -110,6 +115,7 @@ export const CoverVideo = ({ onReady }: Props) => {
             lineHeight: 1.05,
             letterSpacing: { xs: "2px", md: "4px" },
             textTransform: "uppercase",
+            fontFamily: "var(--font-playfair), serif",
           }}
         >
           {t.cover.title1}
@@ -142,13 +148,15 @@ export const CoverVideo = ({ onReady }: Props) => {
             "&:hover": { backgroundColor: "var(--ds-accent-dark)" },
           }}
         >
-          <Typography sx={{
-            fontSize: { xs: "0.6rem", md: "0.65rem" },
-            letterSpacing: "0.4em",
-            textTransform: "uppercase",
-            color: "#fff",
-            fontWeight: 500,
-          }}>
+          <Typography
+            sx={{
+              fontSize: { xs: "0.6rem", md: "0.65rem" },
+              letterSpacing: "0.4em",
+              textTransform: "uppercase",
+              color: "#fff",
+              fontWeight: 500,
+            }}
+          >
             {t.cover.cta}
           </Typography>
         </Box>
@@ -156,26 +164,102 @@ export const CoverVideo = ({ onReady }: Props) => {
 
       <Box
         sx={{
-          position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 3,
-          px: { xs: 3, md: 8 }, py: { xs: 2.5, md: 3 },
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 3,
+          px: { xs: 3, md: 8 },
+          py: { xs: 2.5, md: 3 },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
           borderTop: "1px solid rgba(255,255,255,0.1)",
         }}
       >
-        <Typography sx={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: "rgba(255,255,255,0.38)", textTransform: "uppercase" }}>
+        <Typography
+          sx={{
+            fontSize: "0.6rem",
+            letterSpacing: "0.3em",
+            color: "rgba(255,255,255,0.38)",
+            textTransform: "uppercase",
+          }}
+        >
           Thu — Sat · 18:00–20:00
         </Typography>
 
         <Box
-          onClick={scrollToNext}
-          sx={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", opacity: 0.45, "&:hover": { opacity: 0.75 }, transition: "opacity 0.3s" }}
+          component="a"
+          href="https://jre.eu/en/restaurants/deliriumsilence"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ opacity: 0.7, filter: "invert(1)", mixBlendMode: "screen", "&:hover": { opacity: 1 }, transition: "opacity 0.3s" }}
         >
-          <Box sx={{ width: "1px", height: 36, backgroundColor: "rgba(255,255,255,0.2)", overflow: "hidden", position: "relative" }}>
-            <Box sx={{ position: "absolute", inset: 0, backgroundColor: "#fff", animation: `${scrollLine} 2s ease-in-out infinite` }} />
+          <Image
+            src={jreLogo}
+            alt="JRE"
+            height={56}
+            width={110}
+            style={{ objectFit: "contain" }}
+          />
+        </Box>
+
+        <Box
+          onClick={scrollToNext}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            cursor: "pointer",
+            opacity: 0.45,
+            "&:hover": { opacity: 0.75 },
+            transition: "opacity 0.3s",
+          }}
+        >
+          <Box
+            sx={{
+              width: "1px",
+              height: 36,
+              backgroundColor: "rgba(255,255,255,0.2)",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                backgroundColor: "#fff",
+                animation: `${scrollLine} 2s ease-in-out infinite`,
+              }}
+            />
           </Box>
         </Box>
 
-        <Typography sx={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: "rgba(255,255,255,0.38)", textTransform: "uppercase" }}>
+        <Box
+          component="a"
+          href="https://rs.gaultmillau.com/sr/restaurants/delirium-silence"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ opacity: 0.7, filter: "brightness(0) invert(1)", "&:hover": { opacity: 1 }, transition: "opacity 0.3s" }}
+        >
+          <Image
+            src={gaultMillauLogo}
+            alt="Gault & Millau"
+            height={56}
+            width={120}
+            style={{ objectFit: "contain" }}
+          />
+        </Box>
+
+        <Typography
+          sx={{
+            fontSize: "0.6rem",
+            letterSpacing: "0.3em",
+            color: "rgba(255,255,255,0.38)",
+            textTransform: "uppercase",
+          }}
+        >
           Est. 2024 · Belgrade
         </Typography>
       </Box>

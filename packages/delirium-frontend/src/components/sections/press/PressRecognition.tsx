@@ -52,7 +52,7 @@ export const PressRecognition = () => {
   const p = t.press;
 
   return (
-    <Box id="press" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
+    <Box component="section" aria-label="Press & Recognition" id="press" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
       <Container maxWidth="lg">
 
         {/* Section header + chef image */}
@@ -61,10 +61,10 @@ export const PressRecognition = () => {
             <Typography sx={{ fontSize: "0.7rem", letterSpacing: "0.4em", color: "var(--ds-accent)", textTransform: "uppercase", mb: 3 }}>
               {p.label}
             </Typography>
-            <Typography sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "3rem" }, fontWeight: 300, color: "#f5f0e8", lineHeight: 1.2 }}>
+            <Typography component="h2" sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "3rem" }, fontWeight: 300, color: "#f5f0e8", lineHeight: 1.2 }}>
               {p.headline}
             </Typography>
-            <Typography sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "3rem" }, fontWeight: 300, color: "#f5f0e8", lineHeight: 1.2, mb: 4 }}>
+            <Typography aria-hidden="true" sx={{ fontSize: { xs: "2rem", sm: "2.4rem", md: "3rem" }, fontWeight: 300, color: "#f5f0e8", lineHeight: 1.2, mb: 4 }}>
               {p.headline2}
             </Typography>
             <Divider sx={{ borderColor: "rgba(var(--ds-accent-rgb),0.3)", width: 60 }} />
@@ -125,6 +125,7 @@ export const PressRecognition = () => {
                     {p.vinoYear}
                   </Typography>
                   <Typography
+                    component="h3"
                     sx={{
                       fontSize: { xs: "0.75rem", md: "0.85rem" },
                       fontWeight: 500,
@@ -186,6 +187,7 @@ export const PressRecognition = () => {
                 {p.jreYear}
               </Typography>
               <Typography
+                component="h3"
                 sx={{
                   fontSize: { xs: "0.75rem", md: "0.85rem" },
                   fontWeight: 500,
@@ -234,7 +236,7 @@ export const PressRecognition = () => {
                 >
                   "
                 </Typography>
-                <Typography sx={{ fontSize: "0.85rem", lineHeight: 1.9, textAlign: "justify", color: "rgba(255,255,255,0.55)", mb: 4, fontStyle: "italic" }}>
+                <Typography component="blockquote" sx={{ fontSize: "0.85rem", lineHeight: 1.9, textAlign: "justify", color: "rgba(255,255,255,0.55)", mb: 4, fontStyle: "italic", m: 0 }}>
                   {quote.text}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

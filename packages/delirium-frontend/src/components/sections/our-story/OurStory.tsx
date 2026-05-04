@@ -7,7 +7,7 @@ export const OurStory = () => {
   const s = t.story;
 
   return (
-    <Box id="story" sx={{ py: { xs: 10, md: 18 }, backgroundColor: "#fff", overflow: "hidden" }}>
+    <Box component="section" aria-label="Our Story" id="story" sx={{ py: { xs: 10, md: 18 }, backgroundColor: "#fff", overflow: "hidden" }}>
       <Container maxWidth="lg">
         <Grid container spacing={{ xs: 6, md: 12 }} alignItems="center">
 
@@ -16,7 +16,7 @@ export const OurStory = () => {
               {s.label}
             </Typography>
 
-            <Typography sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, color: "#1a1a1a", letterSpacing: "0.01em" }}>
+            <Typography component="h2" sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, color: "#1a1a1a", letterSpacing: "0.01em" }}>
               {s.headline1}
               <br />{s.headline2}
             </Typography>

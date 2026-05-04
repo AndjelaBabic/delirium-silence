@@ -9,6 +9,10 @@
   --ds-warm: #FAF8F3;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;

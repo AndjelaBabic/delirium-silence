@@ -8,6 +8,8 @@ export const ChefSection = () => {
 
   return (
     <Box
+      component="section"
+      aria-label="The Chef"
       id="chef"
       sx={{ backgroundColor: "var(--ds-light)", color: "#1a1a1a", py: { xs: 10, md: 18 }, overflow: "hidden" }}
     >
@@ -71,7 +73,7 @@ export const ChefSection = () => {
               {c.label}
             </Typography>
 
-            <Typography sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, letterSpacing: "0.01em" }}>
+            <Typography component="h2" sx={{ fontSize: { xs: "1.9rem", sm: "2.2rem", md: "2.8rem" }, fontWeight: 300, lineHeight: 1.2, mb: 4, letterSpacing: "0.01em" }}>
               {c.headline1}
               <br />{c.headline2}
             </Typography>

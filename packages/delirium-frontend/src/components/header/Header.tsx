@@ -68,11 +68,12 @@ export const Header = () => {
           </Typography>
 
           {/* Desktop nav */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 5 }}>
+          <Box component="nav" aria-label="Main navigation" sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 5 }}>
             {NAV_LINKS.map(({ label, href }) => (
-              <Typography
+              <Box
                 key={href}
-                onClick={() => scrollTo(href)}
+                component="a"
+                href={href}
                 sx={{
                   fontSize: "0.7rem",
                   letterSpacing: "0.2em",
@@ -80,12 +81,13 @@ export const Header = () => {
                   color: scrolled ? "#4a4a4a" : "rgba(255,255,255,0.85)",
                   cursor: "pointer",
                   transition: "color 0.3s ease",
+                  textDecoration: "none",
                   "&:hover": { color: scrolled ? "#1a1a1a" : "#fff" },
                   userSelect: "none",
                 }}
               >
                 {label}
-              </Typography>
+              </Box>
             ))}
 
             {/* Reserve CTA */}

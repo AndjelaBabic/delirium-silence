@@ -7,6 +7,7 @@ import { Header } from "../header/Header";
 import { LoadingScreen } from "../LoadingScreen";
 import { BookTable } from "../sections/book-table/BookTable";
 import { ChefSection } from "../sections/chef/ChefSection";
+import { ReserveButton } from "../ReserveButton";
 import { Gallery } from "../sections/galery/Galery";
 import { SetMenus } from "../sections/menu/SetMenu";
 import { OurStory } from "../sections/our-story/OurStory";
@@ -60,17 +61,20 @@ export const Home = () => {
     <>
       {loading && <LoadingScreen exiting={exiting} />}
       <Header />
-      <CoverVideo onReady={onVideoReady} />
-      <PhilosophySection />
-      <ChefSection />
-      <SpaceSection />
-      <OurStory />
-      <SetMenus />
-      <WineSection />
-      <Gallery />
-      <PressRecognition />
-      <BookTable />
+      <main>
+        <CoverVideo onReady={onVideoReady} />
+        <PhilosophySection />
+        <ChefSection />
+        <SpaceSection />
+        <OurStory />
+        <SetMenus />
+        <WineSection />
+        <Gallery />
+        <PressRecognition />
+        <BookTable />
+      </main>
       <Footer />
+      <ReserveButton />
     </>
   );
 };

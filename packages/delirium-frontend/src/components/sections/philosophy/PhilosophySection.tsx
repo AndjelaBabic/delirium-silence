@@ -8,6 +8,8 @@ export const PhilosophySection = () => {
 
   return (
     <Box
+      component="section"
+      aria-label="Our Philosophy"
       sx={{
         backgroundColor: "var(--ds-dark)",
         color: "#e8e8e8",
@@ -56,7 +58,7 @@ export const PhilosophySection = () => {
               {p.label}
             </Typography>
 
-            <Typography sx={{ fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" }, fontWeight: 300, lineHeight: 1.35, mb: 4, letterSpacing: "0.01em" }}>
+            <Typography component="h2" sx={{ fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" }, fontWeight: 300, lineHeight: 1.35, mb: 4, letterSpacing: "0.01em" }}>
               {p.headline1}
               <br />{p.headline2}
               <br />{p.headline3}
