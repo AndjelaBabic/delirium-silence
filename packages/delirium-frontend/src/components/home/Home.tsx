@@ -1,13 +1,13 @@
 "use client";
 
+import { Box } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CoverVideo } from "../cover-video/CoverVideo";
 import { Footer } from "../footer/Footer";
 import { Header } from "../header/Header";
 import { LoadingScreen } from "../LoadingScreen";
-import { BookTable } from "../sections/book-table/BookTable";
-import { ChefSection } from "../sections/chef/ChefSection";
 import { ReserveButton } from "../ReserveButton";
+import { ChefSection } from "../sections/chef/ChefSection";
 import { Gallery } from "../sections/galery/Galery";
 import { SetMenus } from "../sections/menu/SetMenu";
 import { OurStory } from "../sections/our-story/OurStory";
@@ -16,7 +16,7 @@ import { PressRecognition } from "../sections/press/PressRecognition";
 import { SpaceSection } from "../sections/space/SpaceSection";
 import { WineSection } from "../sections/wine/WineSection";
 
-const MIN_DURATION = 600;  // minimum time loading screen shows (ms)
+const MIN_DURATION = 600; // minimum time loading screen shows (ms)
 const EXIT_DURATION = 800; // matches LoadingScreen fadeOut animation (ms)
 const MAX_DURATION = 8000; // failsafe — never stuck longer than this (ms)
 
@@ -49,7 +49,10 @@ export const Home = () => {
       triggerExit();
     }, MAX_DURATION);
 
-    return () => { clearTimeout(minTimer); clearTimeout(maxTimer); };
+    return () => {
+      clearTimeout(minTimer);
+      clearTimeout(maxTimer);
+    };
   }, [triggerExit]);
 
   const onVideoReady = useCallback(() => {
@@ -71,8 +74,20 @@ export const Home = () => {
         <WineSection />
         <Gallery />
         <PressRecognition />
-        <BookTable />
       </main>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          px: { xs: 4, md: 12 },
+          py: 3,
+          backgroundColor: "var(--ds-dark)",
+        }}
+      >
+        <Box sx={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, rgba(201,169,106,0.25))" }} />
+        <Box sx={{ mx: 3, color: "var(--ds-accent)", fontSize: "0.45rem", opacity: 0.7, letterSpacing: "0.6em" }}>◆ ◆ ◆</Box>
+        <Box sx={{ flex: 1, height: "1px", background: "linear-gradient(to left, transparent, rgba(201,169,106,0.25))" }} />
+      </Box>
       <Footer />
       <ReserveButton />
     </>
