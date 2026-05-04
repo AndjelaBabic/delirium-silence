@@ -1,8 +1,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import fetch from "node-fetch";
-import schedule from "node-schedule";
+import { getDb } from "./db.js";
 
 dotenv.config();
 
@@ -10,153 +9,109 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL;
-const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY;
-const INFOBIP_SENDER = process.env.INFOBIP_SENDER || "Delirium";
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+if (!ADMIN_API_KEY) throw new Error("Missing required environment variable: ADMIN_API_KEY");
 
-// Only Thursday (4), Friday (5), Sunday (6)
-const VALID_DAYS = new Set([4, 5, 6]);
-
-const VALID_TIMES = new Set(["18:00", "18:30", "19:00", "19:30", "20:00"]);
-
-function parseLocalDate(dateStr) {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  return new Date(year, month - 1, day);
+function requireAdminKey(req, res, next) {
+  if (req.headers["x-admin-key"] !== ADMIN_API_KEY) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
 }
 
-async function sendSms(to, text) {
-  const response = await fetch(
-    `https://${INFOBIP_BASE_URL}/sms/2/text/advanced`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `App ${INFOBIP_API_KEY}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        messages: [
-          {
-            destinations: [{ to }],
-            from: INFOBIP_SENDER,
-            text,
-          },
-        ],
-      }),
-    }
-  );
+// ─── Public: Menu ─────────────────────────────────────────────────────────────
 
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Infobip error ${response.status}: ${err}`);
-  }
-
-  return response.json();
-}
-
-app.post("/api/reservations", async (req, res) => {
-  const { firstName, lastName, phone, email, guests, date, time } = req.body;
-
-  if (
-    !firstName ||
-    !lastName ||
-    !phone ||
-    !email ||
-    !guests ||
-    !date ||
-    !time
-  ) {
-    return res
-      .status(400)
-      .json({ success: false, message: "All fields are required." });
-  }
-
-  const localDate = parseLocalDate(date);
-
-  if (!VALID_DAYS.has(localDate.getDay())) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Reservations are only available on Thursday, Friday, and Saturdays.",
-    });
-  }
-
-  if (!VALID_TIMES.has(time)) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Invalid time slot selected." });
-  }
-
-  const [hours, minutes] = time.split(":").map(Number);
-  const reservationDateTime = new Date(
-    localDate.getFullYear(),
-    localDate.getMonth(),
-    localDate.getDate(),
-    hours,
-    minutes
-  );
-
-  if (reservationDateTime <= new Date()) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Reservation must be in the future." });
-  }
-
-  // Strip non-digit/+ characters, ensure E.164
-  const formattedPhone = phone.startsWith("+") ? phone : `+${phone}`;
-
-  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const dayName = dayNames[localDate.getDay()];
-
-  try {
-    // 1. Confirmation SMS
-    await sendSms(
-      formattedPhone,
-      `Hello ${firstName}! Your reservation at Delirium Silence is confirmed for ${dayName}, ${date} at ${time} for ${guests} guest(s). We look forward to seeing you!`
-    );
-
-    // 2. Schedule reminder 2 hours before
-    const reminderTime = new Date(
-      reservationDateTime.getTime() - 2 * 60 * 60 * 1000
-    );
-
-    if (reminderTime > new Date()) {
-      schedule.scheduleJob(
-        `reminder-${formattedPhone}-${date}-${time}`,
-        reminderTime,
-        async () => {
-          try {
-            await sendSms(
-              formattedPhone,
-              `Reminder: Your table at Delirium Silence is in 2 hours – today at ${time} for ${guests} guest(s). See you soon, ${firstName}!`
-            );
-            console.log(`Reminder SMS sent to ${formattedPhone}`);
-          } catch (err) {
-            console.error("Failed to send reminder SMS:", err.message);
-          }
-        }
-      );
-      console.log(
-        `Reminder scheduled for ${reminderTime.toISOString()} → ${formattedPhone}`
-      );
-    }
-
-    console.log(
-      `Reservation confirmed: ${firstName} ${lastName} on ${date} at ${time}`
-    );
-    res.json({
-      success: true,
-      message: `Reservation confirmed! A confirmation SMS has been sent to ${formattedPhone}.`,
-    });
-  } catch (err) {
-    console.error("Infobip error:", err.message);
-    res.status(500).json({
-      success: false,
-      message:
-        "Reservation received but SMS could not be sent. Please call us to confirm.",
-    });
-  }
+app.get("/api/menu", (req, res) => {
+  const db = getDb();
+  const items = db
+    .prepare("SELECT * FROM menu_items WHERE is_active = 1 ORDER BY display_order ASC")
+    .all();
+  res.json(items);
 });
+
+// ─── Public: Content ──────────────────────────────────────────────────────────
+
+app.get("/api/content/:section", (req, res) => {
+  const db = getDb();
+  const row = db
+    .prepare("SELECT * FROM content WHERE section = ?")
+    .get(req.params.section);
+
+  if (!row) return res.status(404).json({ error: "Not found" });
+
+  res.json({ en: JSON.parse(row.data_en), sr: JSON.parse(row.data_sr) });
+});
+
+// ─── Admin: Menu ──────────────────────────────────────────────────────────────
+
+app.get("/api/admin/menu", requireAdminKey, (req, res) => {
+  const db = getDb();
+  const items = db
+    .prepare("SELECT * FROM menu_items ORDER BY display_order ASC")
+    .all();
+  res.json(items);
+});
+
+app.post("/api/admin/menu", requireAdminKey, (req, res) => {
+  const { title, title_sr, courses, courses_sr, description, description_sr, price, tag, tag_sr, display_order, is_active } = req.body;
+
+  if (!title || !title_sr || !courses || !courses_sr || !description || !description_sr || !price) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const db = getDb();
+  const result = db
+    .prepare(`INSERT INTO menu_items (title, title_sr, courses, courses_sr, description, description_sr, price, tag, tag_sr, display_order, is_active)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .run(title, title_sr, courses, courses_sr, description, description_sr, price, tag || null, tag_sr || null, display_order ?? 0, is_active ? 1 : 0);
+
+  const item = db.prepare("SELECT * FROM menu_items WHERE id = ?").get(result.lastInsertRowid);
+  res.status(201).json(item);
+});
+
+app.put("/api/admin/menu/:id", requireAdminKey, (req, res) => {
+  const { title, title_sr, courses, courses_sr, description, description_sr, price, tag, tag_sr, display_order, is_active } = req.body;
+
+  if (!title || !title_sr || !courses || !courses_sr || !description || !description_sr || !price) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const db = getDb();
+  db.prepare(`UPDATE menu_items SET title=?, title_sr=?, courses=?, courses_sr=?, description=?, description_sr=?, price=?, tag=?, tag_sr=?, display_order=?, is_active=? WHERE id=?`)
+    .run(title, title_sr, courses, courses_sr, description, description_sr, price, tag || null, tag_sr || null, display_order ?? 0, is_active ? 1 : 0, req.params.id);
+
+  const item = db.prepare("SELECT * FROM menu_items WHERE id = ?").get(req.params.id);
+  if (!item) return res.status(404).json({ error: "Not found" });
+  res.json(item);
+});
+
+app.delete("/api/admin/menu/:id", requireAdminKey, (req, res) => {
+  getDb().prepare("DELETE FROM menu_items WHERE id = ?").run(req.params.id);
+  res.json({ ok: true });
+});
+
+// ─── Admin: Content ───────────────────────────────────────────────────────────
+
+app.get("/api/admin/content/:section", requireAdminKey, (req, res) => {
+  const db = getDb();
+  const row = db.prepare("SELECT * FROM content WHERE section = ?").get(req.params.section);
+  if (!row) return res.status(404).json({ error: "Not found" });
+  res.json({ section: row.section, data_en: JSON.parse(row.data_en), data_sr: JSON.parse(row.data_sr), updated_at: row.updated_at });
+});
+
+app.put("/api/admin/content/:section", requireAdminKey, (req, res) => {
+  const { data_en, data_sr } = req.body;
+  if (!data_en || !data_sr) return res.status(400).json({ error: "Missing data_en or data_sr" });
+
+  getDb()
+    .prepare(`INSERT INTO content (section, data_en, data_sr, updated_at) VALUES (?, ?, ?, datetime('now'))
+              ON CONFLICT(section) DO UPDATE SET data_en=excluded.data_en, data_sr=excluded.data_sr, updated_at=excluded.updated_at`)
+    .run(req.params.section, JSON.stringify(data_en), JSON.stringify(data_sr));
+
+  res.json({ ok: true });
+});
+
+// ─── Start ────────────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

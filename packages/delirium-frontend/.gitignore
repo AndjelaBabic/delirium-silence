@@ -12,6 +12,7 @@ node_modules/
 # Environment variables — never commit, contain API keys
 .env
 .env.local
+.env.local.example
 .env.development.local
 .env.test.local
 .env.production.local

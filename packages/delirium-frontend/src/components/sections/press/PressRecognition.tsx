@@ -1,6 +1,7 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import chefImage from "../../../assets/chef2.png";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 const JRE_URL = "https://jre.eu/en/restaurants/deliriumsilence";
 const VINO_URL =
@@ -48,8 +49,7 @@ const awardBoxSx = {
 };
 
 export const PressRecognition = () => {
-  const { t } = useLanguage();
-  const p = t.press;
+  const p = useSection<typeof translations.en.press>("press");
 
   return (
     <Box component="section" aria-label="Press & Recognition" id="press" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>

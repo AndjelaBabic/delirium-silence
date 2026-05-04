@@ -1,10 +1,10 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import OurStoryImage from "../../../assets/story.png";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 export const OurStory = () => {
-  const { t } = useLanguage();
-  const s = t.story;
+  const s = useSection<typeof translations.en.story>("story");
 
   return (
     <Box component="section" aria-label="Our Story" id="story" sx={{ py: { xs: 10, md: 18 }, backgroundColor: "#fff", overflow: "hidden" }}>

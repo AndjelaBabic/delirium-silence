@@ -1,10 +1,10 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import image from "../../../assets/philosophy.png";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 export const PhilosophySection = () => {
-  const { t } = useLanguage();
-  const p = t.philosophy;
+  const p = useSection<typeof translations.en.philosophy>("philosophy");
 
   return (
     <Box

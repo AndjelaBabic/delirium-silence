@@ -1,11 +1,12 @@
 "use client";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 import { Box, Typography, styled } from "@mui/material";
 import { keyframes } from "@mui/system";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import jreLogo from "../../assets/JRE_Logo_.png";
 import gaultMillauLogo from "../../assets/Logo Gault&millau.png";
-import { useLanguage } from "../../context/LanguageContext";
 
 const VIDEO_SRC = "/delirium-cover.mp4";
 
@@ -49,7 +50,7 @@ interface Props {
 }
 
 export const CoverVideo = ({ onReady }: Props) => {
-  const { t } = useLanguage();
+  const cover = useSection<typeof translations.en.cover>("cover");
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -103,7 +104,7 @@ export const CoverVideo = ({ onReady }: Props) => {
             mb: 4,
           }}
         >
-          {t.cover.location}
+          {cover.location}
         </Typography>
 
         <Typography
@@ -118,9 +119,9 @@ export const CoverVideo = ({ onReady }: Props) => {
             fontFamily: "var(--font-playfair), serif",
           }}
         >
-          {t.cover.title1}
+          {cover.title1}
           <br />
-          {t.cover.title2}
+          {cover.title2}
         </Typography>
 
         <Typography
@@ -134,7 +135,7 @@ export const CoverVideo = ({ onReady }: Props) => {
             mb: { xs: 5, md: 6 },
           }}
         >
-          {t.cover.subtitle}
+          {cover.subtitle}
         </Typography>
 
         <Box
@@ -157,7 +158,7 @@ export const CoverVideo = ({ onReady }: Props) => {
               fontWeight: 500,
             }}
           >
-            {t.cover.cta}
+            {cover.cta}
           </Typography>
         </Box>
       </Content>
@@ -193,7 +194,13 @@ export const CoverVideo = ({ onReady }: Props) => {
           href="https://jre.eu/en/restaurants/deliriumsilence"
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ opacity: 0.7, filter: "invert(1)", mixBlendMode: "screen", "&:hover": { opacity: 1 }, transition: "opacity 0.3s" }}
+          sx={{
+            opacity: 0.7,
+            filter: "invert(1)",
+            mixBlendMode: "screen",
+            "&:hover": { opacity: 1 },
+            transition: "opacity 0.3s",
+          }}
         >
           <Image
             src={jreLogo}
@@ -241,7 +248,12 @@ export const CoverVideo = ({ onReady }: Props) => {
           href="https://rs.gaultmillau.com/sr/restaurants/delirium-silence"
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ opacity: 0.7, filter: "brightness(0) invert(1)", "&:hover": { opacity: 1 }, transition: "opacity 0.3s" }}
+          sx={{
+            opacity: 0.7,
+            filter: "brightness(0) invert(1)",
+            "&:hover": { opacity: 1 },
+            transition: "opacity 0.3s",
+          }}
         >
           <Image
             src={gaultMillauLogo}

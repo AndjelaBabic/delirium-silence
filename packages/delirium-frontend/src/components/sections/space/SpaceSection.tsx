@@ -1,10 +1,10 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import spaceImage from "../../../assets/dining.jpg";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 export const SpaceSection = () => {
-  const { t } = useLanguage();
-  const s = t.space;
+  const s = useSection<typeof translations.en.space>("space");
 
   return (
     <Box component="section" aria-label="The Setting" id="space" sx={{ backgroundColor: "var(--ds-dark)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>

@@ -1,9 +1,9 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useSection } from "@/hooks/useSection";
+import { translations } from "@/i18n/translations";
 
 export const WineSection = () => {
-  const { t } = useLanguage();
-  const w = t.wine;
+  const w = useSection<typeof translations.en.wine>("wine");
 
   return (
     <Box component="section" aria-label="Wine & Pairings" id="wine" sx={{ backgroundColor: "var(--ds-warm)", py: { xs: 10, md: 18 }, overflow: "hidden" }}>
@@ -50,7 +50,7 @@ export const WineSection = () => {
               </Typography>
 
               <Box sx={{ display: "flex", flexDirection: "column" }}>
-                {w.pillars.map(({ label, text }: { label: string; text: string }, i: number, arr: { label: string; text: string }[]) => (
+                {w.pillars.map(({ label, text }: { label: string; text: string }, i: number, arr: readonly { label: string; text: string }[]) => (
                   <Box
                     key={label}
                     sx={{
