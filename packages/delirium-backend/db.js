@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 // ESM-compatible __dirname
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_PATH = path.join(__dirname, "data.db");
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, "data.db");
 
 let db;
 
